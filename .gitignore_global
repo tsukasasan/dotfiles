@@ -1,0 +1,28 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+
+# Credentials / Secrets
+.ssh/
+.aws/
+.gnupg/
+.netrc
+.npmrc
+.pypirc
+credentials.json
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# Environment
+.env
+.env.*
+!.env.example

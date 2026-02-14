@@ -1,0 +1,15 @@
+# Local/machine-specific overrides
+*.local
+
+# macOS
+.DS_Store
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Claude Code local settings
+.claude/
