@@ -37,7 +37,7 @@ SKIP_UPGRADE=1 ./install.sh
 ## Key Conventions
 
 - Symlinks are created from `~/dotfiles/` to `$HOME` (e.g., `~/.zshrc` → `~/dotfiles/.zshrc`)
-- Tools not in apt are installed via Homebrew (`eza`, `sheldon`, `lazygit`, `git-delta`, `fzf`, `bat`, `ripgrep`, `fd`, `thefuck`, `glow`)
+- Most CLI tools are installed via Homebrew (`eza`, `sheldon`, `lazygit`, `git-delta`, `fzf`, `bat`, `ripgrep`, `fd`, `thefuck`, `glow`, `gh`, `zoxide`, `entr`, `btop`, `trash-cli`, `jq`, `starship`, `mise`)
 - `yq` is installed via pip3 (not in apt/brew)
 - The `cheat` function expects dotfiles at `$HOME/dotfiles/` or `$DOTFILES_DIR`
 - WSL2-specific features are conditionally loaded when `$WSL_DISTRO_NAME` is set

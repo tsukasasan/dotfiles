@@ -53,22 +53,16 @@ info "Installing system packages..."
 sudo apt install -y -qq \
   zsh \
   git \
-  gh \
   curl \
   wget \
   unzip \
   zip \
-  jq \
-  build-essential \
-  zoxide \
-  entr \
-  btop \
-  trash-cli
+  build-essential
 
 ok "System packages installed"
 
 # ==============================================================================
-# 3. Homebrew (for packages not in apt)
+# 3. Homebrew (primary package manager for CLI tools)
 # ==============================================================================
 if ! command -v brew &> /dev/null; then
   info "Installing Homebrew..."
@@ -77,7 +71,9 @@ if ! command -v brew &> /dev/null; then
 fi
 
 info "Installing brew packages..."
-brew install eza sheldon lazygit git-delta fzf bat ripgrep fd thefuck glow
+brew install \
+  eza sheldon lazygit git-delta fzf bat ripgrep fd thefuck glow \
+  gh zoxide entr btop trash-cli jq starship mise
 
 ok "Brew packages installed"
 
@@ -96,29 +92,14 @@ fi
 ok "yq installed"
 
 # ==============================================================================
-# 4. Starship
+# 4. mise
 # ==============================================================================
-if ! command -v starship &> /dev/null; then
-  info "Installing starship..."
-  curl -sS https://starship.rs/install.sh | sh -s -- -y
-fi
-ok "Starship installed"
-
-# ==============================================================================
-# 5. mise
-# ==============================================================================
-if ! command -v mise &> /dev/null; then
-  info "Installing mise..."
-  curl https://mise.run | sh
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-
 info "Installing Node.js (latest stable) via mise..."
 mise use --global node@lts
 ok "mise + Node.js installed"
 
 # ==============================================================================
-# 6. AWS CLI + SSM Plugin
+# 5. AWS CLI + SSM Plugin
 # ==============================================================================
 if ! command -v aws &> /dev/null; then
   info "Installing AWS CLI v2..."
@@ -139,7 +120,7 @@ fi
 ok "AWS CLI + SSM Plugin installed"
 
 # ==============================================================================
-# 7. Claude Code (native installer - recommended by Anthropic)
+# 6. Claude Code (native installer - recommended by Anthropic)
 # ==============================================================================
 if ! command -v claude &> /dev/null; then
   info "Installing Claude Code..."
@@ -150,7 +131,7 @@ fi
 ok "Claude Code installed (run 'claude' to authenticate)"
 
 # ==============================================================================
-# 8. Symlinks
+# 7. Symlinks
 # ==============================================================================
 info "Creating symlinks..."
 
@@ -181,7 +162,7 @@ git config --global core.excludesfile "$HOME/.gitignore_global"
 ok "Symlinks created"
 
 # ==============================================================================
-# 9. Change default shell to zsh
+# 8. Change default shell to zsh
 # ==============================================================================
 if [[ "$SHELL" != *"zsh"* ]]; then
   info "Changing default shell to zsh..."
@@ -190,7 +171,7 @@ fi
 ok "Default shell set to zsh"
 
 # ==============================================================================
-# 10. Initialize sheldon plugins
+# 9. Initialize sheldon plugins
 # ==============================================================================
 info "Initializing sheldon plugins (this may take a moment)..."
 zsh -c 'eval "$(sheldon source)"' 2>/dev/null || true
@@ -205,7 +186,8 @@ echo -e "\033[1;32m  Setup complete! Open a new terminal.  \033[0m"
 echo -e "\033[1;32m========================================\033[0m"
 echo ""
 echo "Installed:"
-echo "  zsh, starship, sheldon, fzf, mise"
-echo "  eza, bat, ripgrep, fd, zoxide, lazygit, delta, thefuck"
-echo "  yq, trash-cli, entr, btop"
-echo "  Claude Code, Node.js $(node --version 2>/dev/null || echo '(pending)'), AWS CLI, SSM Plugin"
+echo "  [apt] zsh, git, curl, wget, build-essential"
+echo "  [brew] eza, sheldon, lazygit, delta, fzf, bat, ripgrep, fd, thefuck, glow"
+echo "  [brew] gh, zoxide, entr, btop, trash-cli, jq, starship, mise"
+echo "  [pip] yq"
+echo "  [other] Claude Code, Node.js $(node --version 2>/dev/null || echo '(pending)'), AWS CLI, SSM Plugin"
