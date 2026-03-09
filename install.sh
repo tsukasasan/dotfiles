@@ -57,7 +57,8 @@ sudo apt install -y -qq \
   wget \
   unzip \
   zip \
-  build-essential
+  build-essential \
+  dnsutils
 
 ok "System packages installed"
 
