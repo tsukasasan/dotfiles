@@ -58,7 +58,8 @@ sudo apt install -y -qq \
   unzip \
   zip \
   build-essential \
-  dnsutils
+  dnsutils \
+  wslu
 
 ok "System packages installed"
 

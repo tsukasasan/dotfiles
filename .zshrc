@@ -139,17 +139,17 @@ export GPG_TTY=$(tty)
 # --- WSL2: Windows integration ---
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
   # Browser for aws login, etc.
-  export BROWSER='explorer.exe'
+  export BROWSER='wslview'
 
   # Clipboard integration (macOS-style aliases)
   alias pbcopy='clip.exe'
   alias pbpaste='powershell.exe -noprofile -command "Get-Clipboard" | tr -d "\r"'
 
   # Open files/URLs with Windows default app
-  alias open='explorer.exe'
+  alias open='wslview'
 
   # Windows user and home directory
-  export WIN_USER="$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r\n')"
+  export WIN_USER="$(wslvar USERNAME)"
   export WIN_HOME="/mnt/c/Users/$WIN_USER"
 
   # Windows Terminal: notify current directory for duplicate tab/pane
