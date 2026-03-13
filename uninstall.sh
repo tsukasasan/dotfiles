@@ -24,6 +24,7 @@ remove_symlink() {
 }
 
 remove_symlink "$HOME/.zshrc"
+remove_symlink "$HOME/.vimrc"
 remove_symlink "$HOME/.config/starship.toml"
 remove_symlink "$HOME/.config/sheldon/plugins.toml"
 remove_symlink "$HOME/.gitconfig.delta"

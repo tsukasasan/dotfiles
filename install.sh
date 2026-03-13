@@ -145,6 +145,7 @@ backup_if_exists "$HOME/.gitconfig.delta"
 backup_if_exists "$HOME/.gitignore_global"
 
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc"
 # cheatsheet.md is accessed directly via cheat() function, no symlink needed
 mkdir -p "$HOME/.config"
 ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
