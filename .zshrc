@@ -70,8 +70,6 @@ alias la='eza -a --git -g -h --oneline'  # all files, one per line
 alias ll='eza -l --git -g -h'            # long format with git status
 alias cat='bat --paging=never'
 alias catp='bat -pp'                  # plain output (no decorations)
-catc() { bat -pp "$@" | clip.exe; }       # copy to clipboard
-catcc() { bat -pp "$@" | tee >(clip.exe); }  # display and copy to clipboard
 alias grep='rg'
 alias find='fd'
 alias diff='delta'
@@ -141,9 +139,22 @@ if [[ -n "$WSL_DISTRO_NAME" ]]; then
   # Browser for aws login, etc.
   export BROWSER='wslview'
 
-  # Clipboard integration (macOS-style aliases)
-  alias pbcopy='clip.exe'
-  alias pbpaste='powershell.exe -noprofile -command "Get-Clipboard" | tr -d "\r"'
+  # Clipboard integration (macOS-style aliases, UTF-8 safe)
+  _wsl_copy() {
+    powershell.exe -noprofile -command \
+      '[Console]::InputEncoding = [System.Text.Encoding]::UTF8;
+       $t = [Console]::In.ReadToEnd().TrimEnd([char]10).TrimEnd([char]13);
+       Set-Clipboard -Value $t'
+  }
+  _wsl_paste() {
+    powershell.exe -noprofile -command \
+      '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8;
+       Get-Clipboard' | tr -d '\r'
+  }
+  alias pbcopy='_wsl_copy'
+  alias pbpaste='_wsl_paste'
+  catc() { bat -pp "$@" | _wsl_copy; }        # copy to clipboard
+  catcc() { bat -pp "$@" | tee >(_wsl_copy); }  # display and copy to clipboard
 
   # Open files/URLs with Windows default app
   alias open='wslview'
