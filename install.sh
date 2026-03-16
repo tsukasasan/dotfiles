@@ -63,6 +63,20 @@ sudo apt install -y -qq \
 
 ok "System packages installed"
 
+# Generate locales (en_US.UTF-8 for LANG, ja_JP.UTF-8 for LC_CTYPE)
+LOCALES_TO_GEN=()
+locale -a 2>/dev/null | grep -q 'en_US.utf8' || LOCALES_TO_GEN+=(en_US.UTF-8)
+locale -a 2>/dev/null | grep -q 'ja_JP.utf8' || LOCALES_TO_GEN+=(ja_JP.UTF-8)
+if [[ ${#LOCALES_TO_GEN[@]} -gt 0 ]]; then
+  info "Generating locales: ${LOCALES_TO_GEN[*]}..."
+  for loc in "${LOCALES_TO_GEN[@]}"; do
+    sudo locale-gen "$loc"
+  done
+  ok "Locales generated"
+else
+  ok "Required locales already available"
+fi
+
 # ==============================================================================
 # 3. Homebrew (primary package manager for CLI tools)
 # ==============================================================================
