@@ -23,7 +23,18 @@ remove_symlink() {
   fi
 }
 
-remove_symlink "$HOME/.zshrc"
+# .zshrc: remove source line (keep file for external tool additions)
+DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+ZSHRC_SOURCE="source \"$DOTFILES_DIR/.zshrc\""
+if [[ -L "$HOME/.zshrc" ]]; then
+  # Legacy symlink method
+  remove_symlink "$HOME/.zshrc"
+elif [[ -f "$HOME/.zshrc" ]] && grep -qF "$ZSHRC_SOURCE" "$HOME/.zshrc"; then
+  grep -vF "$ZSHRC_SOURCE" "$HOME/.zshrc" > "$HOME/.zshrc.tmp"
+  mv "$HOME/.zshrc.tmp" "$HOME/.zshrc"
+  ok "Removed dotfiles source line from ~/.zshrc"
+fi
+
 remove_symlink "$HOME/.vimrc"
 remove_symlink "$HOME/.config/starship.toml"
 remove_symlink "$HOME/.config/sheldon/plugins.toml"
@@ -57,7 +68,6 @@ remove_symlink "$HOME/.local/bin/safe-claude"
 remove_symlink "$HOME/.local/bin/claude-audit"
 
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
-DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 TEMPLATE="$DOTFILES_DIR/claude/settings.template.json"
 
 if [[ -f "$CLAUDE_SETTINGS" && -f "$TEMPLATE" ]]; then

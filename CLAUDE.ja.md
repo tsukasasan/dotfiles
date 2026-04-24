@@ -56,7 +56,8 @@ mise --version
 
 ## 主な規約
 
-- シンボリックリンクは`~/dotfiles/`から`$HOME`に作成（例: `~/.zshrc` → `~/dotfiles/.zshrc`）
+- `.zshrc`はsymlink方式ではなくsource方式（`source ~/dotfiles/.zshrc`）を使用。外部ツールが`~/.zshrc`に追記してもdotfilesリポジトリが汚れない
+- その他の設定ファイルは`~/dotfiles/`から`$HOME`にシンボリックリンクを作成（例: `~/.vimrc` → `~/dotfiles/.vimrc`）
 - aptにないツールはHomebrew経由でインストール（`eza`, `sheldon`, `lazygit`, `git-delta`, `fzf`, `bat`, `ripgrep`, `fd`, `thefuck`, `glow`）
 - `yq`はpip3経由でインストール（apt/brewにないため）
 - `cheat`関数は`$HOME/dotfiles/`または`$DOTFILES_DIR`にdotfilesがあることを想定

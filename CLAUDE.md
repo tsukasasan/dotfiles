@@ -42,7 +42,8 @@ SKIP_UPGRADE=1 ./install.sh
 
 ## Key Conventions
 
-- Symlinks are created from `~/dotfiles/` to `$HOME` (e.g., `~/.zshrc` → `~/dotfiles/.zshrc`)
+- `.zshrc` uses source method (`source ~/dotfiles/.zshrc`) instead of symlink, so external tools can append to `~/.zshrc` without polluting the dotfiles repo
+- Other config files use symlinks from `~/dotfiles/` to `$HOME` (e.g., `~/.vimrc` → `~/dotfiles/.vimrc`)
 - Most CLI tools are installed via Homebrew (`eza`, `sheldon`, `lazygit`, `git-delta`, `fzf`, `bat`, `ripgrep`, `fd`, `thefuck`, `glow`, `gh`, `zoxide`, `entr`, `btop`, `trash-cli`, `jq`, `starship`, `mise`)
 - `yq` is installed via pip3 (not in apt/brew)
 - The `cheat` function expects dotfiles at `$HOME/dotfiles/` or `$DOTFILES_DIR`

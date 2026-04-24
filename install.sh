@@ -152,13 +152,30 @@ ok "Claude Code installed (run 'claude' to authenticate)"
 info "Creating symlinks..."
 
 # Backup existing files before creating symlinks
-backup_if_exists "$HOME/.zshrc"
 backup_if_exists "$HOME/.config/starship.toml"
 backup_if_exists "$HOME/.config/sheldon/plugins.toml"
 backup_if_exists "$HOME/.gitconfig.delta"
 backup_if_exists "$HOME/.gitignore_global"
 
-ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+# .zshrc: source method instead of symlink (prevents external tools from polluting dotfiles repo)
+ZSHRC_SOURCE="source \"$DOTFILES_DIR/.zshrc\""
+if [[ ! -f "$HOME/.zshrc" ]] || ! grep -qF "$ZSHRC_SOURCE" "$HOME/.zshrc"; then
+  # Prepend source line so dotfiles config loads first, external tool additions come after
+  if [[ -f "$HOME/.zshrc" ]]; then
+    backup_if_exists "$HOME/.zshrc"
+    EXISTING="$(cat "$HOME/.zshrc")"
+    echo "$ZSHRC_SOURCE" > "$HOME/.zshrc"
+    echo "$EXISTING" >> "$HOME/.zshrc"
+  else
+    echo "$ZSHRC_SOURCE" > "$HOME/.zshrc"
+  fi
+fi
+# Remove stale symlink if upgrading from symlink method
+if [[ -L "$HOME/.zshrc" ]]; then
+  rm "$HOME/.zshrc"
+  echo "$ZSHRC_SOURCE" > "$HOME/.zshrc"
+fi
+
 ln -sf "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc"
 # cheatsheet.md is accessed directly via cheat() function, no symlink needed
 mkdir -p "$HOME/.config"
