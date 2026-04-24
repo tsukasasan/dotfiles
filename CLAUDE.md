@@ -31,6 +31,12 @@ SKIP_UPGRADE=1 ./install.sh
 - `.config/sheldon/plugins.toml` - Sheldon zsh plugin definitions
 - `.gitconfig.delta` - Git diff settings using delta
 - `cheatsheet.md` - Quick reference for installed tools (accessed via `cheat` command)
+- `claude/hooks/pre-tool-use.sh` - PreToolUse safety hook (blocks dangerous Bash commands)
+- `claude/scripts/safe-claude` - Wrapper with git snapshot for safe agent sessions
+- `claude/scripts/claude-audit` - Session audit tool for reviewing tool usage
+- `claude/settings.template.json` - Curated permissions + hooks config template
+- `docs/claude-safe-usage.md` - Comprehensive safe usage guide (EN)
+- `docs/claude-safe-usage.ja.md` - Comprehensive safe usage guide (JA)
 - `install.sh` - One-shot setup script for fresh WSL2 Ubuntu
 - `uninstall.sh` - Remove symlinks and git config entries
 

@@ -27,6 +27,12 @@ cd ~/dotfiles
 - `.gitattributes` - git attributes (LF enforcement, diff settings)
 - `.editorconfig` - editor configuration
 - `cheatsheet.md` - Command cheatsheet
+- `claude/hooks/pre-tool-use.sh` - Claude Code safety hook (blocks dangerous commands)
+- `claude/scripts/safe-claude` - Claude Code wrapper with git snapshot
+- `claude/scripts/claude-audit` - Claude Code session audit tool
+- `claude/settings.template.json` - Claude Code permissions template
+- `docs/claude-safe-usage.md` - Claude Code safe usage guide
+- `docs/claude-safe-usage.ja.md` - Claude Code safe usage guide (JA)
 - `install.sh` - Installation script
 - `uninstall.sh` - Uninstallation script
 - `LICENSE` - MIT License
@@ -39,7 +45,7 @@ cd ~/dotfiles
 - **Utilities**: lazygit, mise, jq, yq, trash-cli, entr, btop
 - **Git**: git, gh (GitHub CLI)
 - **Cloud**: AWS CLI, SSM Plugin
-- **AI**: Claude Code
+- **AI**: Claude Code, safe-claude, claude-audit
 
 Use `cheat -l` to list available cheatsheets, `cheat <tool>` to view.
 

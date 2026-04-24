@@ -1,0 +1,98 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git branch*)",
+      "Bash(git show*)",
+      "Bash(git stash list*)",
+      "Bash(git remote -v*)",
+      "Bash(git rev-parse*)",
+      "Bash(git ls-files*)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(fd *)",
+      "Bash(find *)",
+      "Bash(echo *)",
+      "Bash(pwd)",
+      "Bash(which *)",
+      "Bash(type *)",
+      "Bash(env)",
+      "Bash(date *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(jq *)",
+      "Bash(yq *)",
+      "Bash(mise *)",
+      "Bash(brew *)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf ~/*)",
+      "Bash(rm -rf $HOME)",
+      "Bash(rm -rf $HOME/*)",
+      "Bash(sudo rm -rf /)",
+      "Bash(sudo rm -rf /*)",
+      "Bash(dd of=/dev/*)",
+      "Bash(sudo dd of=/dev/*)",
+      "Bash(mkfs*)",
+      "Bash(sudo mkfs*)",
+      "Bash(fdisk*)",
+      "Bash(sudo fdisk*)",
+      "Bash(shutdown*)",
+      "Bash(sudo shutdown*)",
+      "Bash(reboot*)",
+      "Bash(sudo reboot*)",
+      "Bash(halt*)",
+      "Bash(poweroff*)",
+      "Bash(git push --force * main*)",
+      "Bash(git push --force * master*)",
+      "Bash(git push -f * main*)",
+      "Bash(git push -f * master*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(kill -9 1)",
+      "Bash(kill -9 -1)",
+      "Bash(chmod 777 /*)",
+      "Bash(chmod -R 777 /*)",
+      "Read(.env*)",
+      "Read(.ssh/*)",
+      "Read(.aws/*)",
+      "Read(.gnupg/*)",
+      "Edit(.env*)",
+      "Edit(.ssh/*)",
+      "Edit(.aws/*)",
+      "Edit(.gnupg/*)",
+      "Write(.env*)",
+      "Write(.ssh/*)",
+      "Write(.aws/*)",
+      "Write(.gnupg/*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool-use.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

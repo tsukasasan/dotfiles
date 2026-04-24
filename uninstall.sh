@@ -48,6 +48,38 @@ if [[ "$(git config --global core.excludesfile 2>/dev/null)" == "$HOME/.gitignor
 fi
 
 # ==============================================================================
+# Remove Claude Code safety layer
+# ==============================================================================
+info "Removing Claude Code safety layer..."
+
+remove_symlink "$HOME/.claude/hooks/pre-tool-use.sh"
+remove_symlink "$HOME/.local/bin/safe-claude"
+remove_symlink "$HOME/.local/bin/claude-audit"
+
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+TEMPLATE="$DOTFILES_DIR/claude/settings.template.json"
+
+if [[ -f "$CLAUDE_SETTINGS" && -f "$TEMPLATE" ]]; then
+  info "Removing merged safety rules from Claude Code settings..."
+  CLEANED="$(jq -s '
+    (.[0].permissions.allow // []) as $tpl_allow |
+    (.[0].permissions.deny // []) as $tpl_deny |
+    .[1] | .permissions.allow = ([.permissions.allow // [] | .[] | select(. as $item | $tpl_allow | index($item) | not)]) |
+    .permissions.deny = ([.permissions.deny // [] | .[] | select(. as $item | $tpl_deny | index($item) | not)]) |
+    .hooks.PreToolUse = ([.hooks.PreToolUse // [] | .[] | select(.hooks[0].command != "~/.claude/hooks/pre-tool-use.sh")]) |
+    if (.hooks.PreToolUse | length) == 0 then del(.hooks.PreToolUse) else . end |
+    if (.hooks | length) == 0 then del(.hooks) else . end |
+    if (.permissions.allow | length) == 0 then del(.permissions.allow) else . end |
+    if (.permissions.deny | length) == 0 then del(.permissions.deny) else . end |
+    if (.permissions | length) == 0 then del(.permissions) else . end
+  ' "$TEMPLATE" "$CLAUDE_SETTINGS")"
+  echo "$CLEANED" | jq '.' > "$CLAUDE_SETTINGS.tmp"
+  mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
+  ok "Safety rules removed from settings.json"
+fi
+
+# ==============================================================================
 # Restore backups (optional)
 # ==============================================================================
 BACKUP_DIR="$HOME/.dotfiles_backup"

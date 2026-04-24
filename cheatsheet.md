@@ -331,6 +331,29 @@ claude "explain this codebase"             # ワンショット実行
 | `claude doctor` | インストール診断 |
 | `claude update` | アップデート |
 
+### safe-claude (safety wrapper)
+
+```bash
+safe-claude                  # gitスナップショット付きでclaude起動
+safe-claude "fix tests"      # 引数もパススルー
+safe-claude --resume         # 前回セッション再開
+```
+
+- 開始前にgit stashでスナップショット
+- 終了後にgit diff --statでサマリ表示
+- スナップショットrefで復元可能
+
+### claude-audit (session review)
+
+```bash
+claude-audit                 # 直近5セッションの操作を表示
+claude-audit -n 10           # 直近10セッション
+claude-audit --commands      # Bashコマンドのみ
+claude-audit --edits         # ファイル編集のみ
+```
+
+- 赤: 危険な操作, 緑: 安全な操作, 黄: 非Bashツール
+
 ---
 
 ## starship (プロンプト)

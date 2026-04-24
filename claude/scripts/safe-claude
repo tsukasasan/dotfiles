@@ -1,0 +1,51 @@
+#!/bin/bash
+# safe-claude: Wrapper for Claude Code with git snapshot safety net
+# Takes a snapshot before running claude, shows diff summary after exit
+
+set -euo pipefail
+
+SNAPSHOT_FILE=""
+
+cleanup() {
+  [[ -n "$SNAPSHOT_FILE" && -f "$SNAPSHOT_FILE" ]] && rm -f "$SNAPSHOT_FILE"
+}
+trap cleanup EXIT
+
+# Take git snapshot if inside a git repo
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+  # git stash create is non-destructive: creates a stash commit without modifying working tree
+  snapshot_ref="$(git stash create 2>/dev/null || true)"
+
+  if [[ -n "$snapshot_ref" ]]; then
+    SNAPSHOT_FILE="/tmp/claude-safe-snapshot-$$"
+    echo "$snapshot_ref" > "$SNAPSHOT_FILE"
+    echo -e "\033[1;34m[safe-claude]\033[0m Snapshot saved: ${snapshot_ref:0:8}"
+    echo -e "\033[1;34m[safe-claude]\033[0m Restore with: git stash apply $snapshot_ref"
+  else
+    echo -e "\033[1;34m[safe-claude]\033[0m Working tree is clean (no snapshot needed)"
+  fi
+else
+  echo -e "\033[1;33m[safe-claude]\033[0m Not a git repo — skipping snapshot"
+fi
+
+echo ""
+
+# Run claude with all user arguments
+claude "$@"
+exit_code=$?
+
+echo ""
+
+# Show diff summary if inside a git repo
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+  echo -e "\033[1;34m[safe-claude]\033[0m Changes made during session:"
+  git diff --stat
+  echo ""
+
+  if [[ -n "$SNAPSHOT_FILE" && -f "$SNAPSHOT_FILE" ]]; then
+    ref="$(cat "$SNAPSHOT_FILE")"
+    echo -e "\033[1;34m[safe-claude]\033[0m To revert all changes: git stash apply $ref && git checkout ."
+  fi
+fi
+
+exit $exit_code

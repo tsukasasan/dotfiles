@@ -195,6 +195,72 @@ zsh -c 'eval "$(sheldon source)"' 2>/dev/null || true
 ok "Sheldon plugins initialized"
 
 # ==============================================================================
+# 10. Claude Code Safety (hooks, scripts, permissions)
+# ==============================================================================
+info "Setting up Claude Code safety layer..."
+
+CLAUDE_DIR="$HOME/.claude"
+CLAUDE_HOOKS_DIR="$CLAUDE_DIR/hooks"
+CLAUDE_SETTINGS="$CLAUDE_DIR/settings.json"
+TEMPLATE="$DOTFILES_DIR/claude/settings.template.json"
+
+# Create directories
+mkdir -p "$CLAUDE_HOOKS_DIR"
+mkdir -p "$HOME/.local/bin"
+
+# Symlink hook script
+ln -sf "$DOTFILES_DIR/claude/hooks/pre-tool-use.sh" "$CLAUDE_HOOKS_DIR/pre-tool-use.sh"
+
+# Symlink wrapper scripts
+ln -sf "$DOTFILES_DIR/claude/scripts/safe-claude" "$HOME/.local/bin/safe-claude"
+ln -sf "$DOTFILES_DIR/claude/scripts/claude-audit" "$HOME/.local/bin/claude-audit"
+
+# Merge settings.template.json into existing settings.json (preserve existing rules)
+if [[ -f "$CLAUDE_SETTINGS" ]]; then
+  info "Merging Claude Code safety settings (preserving existing rules)..."
+  # Merge allow arrays (union), merge deny arrays (union), merge hooks
+  MERGED="$(jq -s '
+    # $template is .[0], $existing is .[1]
+    (.[0].permissions.allow // []) as $tpl_allow |
+    (.[1].permissions.allow // []) as $ext_allow |
+    (.[0].permissions.deny // []) as $tpl_deny |
+    (.[1].permissions.deny // []) as $ext_deny |
+    (.[0].hooks // {}) as $tpl_hooks |
+    (.[1].hooks // {}) as $ext_hooks |
+    .[1] * {
+      permissions: {
+        allow: ($ext_allow + ($tpl_allow - $ext_allow)),
+        deny: ($ext_deny + ($tpl_deny - $ext_deny))
+      },
+      hooks: (
+        # Merge hook arrays by key
+        ($ext_hooks | keys) as $ek |
+        ($tpl_hooks | keys) as $tk |
+        ($ek + ($tk - $ek)) | unique | map(
+          . as $key |
+          if ($ext_hooks[$key] // null) != null and ($tpl_hooks[$key] // null) != null then
+            {($key): (($ext_hooks[$key] // []) + (($tpl_hooks[$key] // []) | map(
+              select(. as $item | ($ext_hooks[$key] // []) | map(.matcher == $item.matcher and .hooks == $item.hooks) | any | not)
+            )))}
+          elif ($tpl_hooks[$key] // null) != null then
+            {($key): $tpl_hooks[$key]}
+          else
+            {($key): $ext_hooks[$key]}
+          end
+        ) | add // {}
+      )
+    }
+  ' "$TEMPLATE" "$CLAUDE_SETTINGS")"
+  echo "$MERGED" | jq '.' > "$CLAUDE_SETTINGS.tmp"
+  mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
+else
+  info "Creating Claude Code settings from template..."
+  cp "$TEMPLATE" "$CLAUDE_SETTINGS"
+fi
+
+ok "Claude Code safety layer configured"
+
+# ==============================================================================
 # Done
 # ==============================================================================
 echo ""

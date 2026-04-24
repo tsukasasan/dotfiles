@@ -27,6 +27,12 @@ cd ~/dotfiles
 - `.gitattributes` - git属性（LF強制、diff設定）
 - `.editorconfig` - エディタ設定
 - `cheatsheet.md` - コマンドチートシート
+- `claude/hooks/pre-tool-use.sh` - Claude Code安全フック（危険なコマンドをブロック）
+- `claude/scripts/safe-claude` - gitスナップショット付きClaude Codeラッパー
+- `claude/scripts/claude-audit` - Claude Codeセッション監査ツール
+- `claude/settings.template.json` - Claude Code権限テンプレート
+- `docs/claude-safe-usage.md` - Claude Code安全使用ガイド
+- `docs/claude-safe-usage.ja.md` - Claude Code安全使用ガイド（日本語）
 - `install.sh` - インストールスクリプト
 - `uninstall.sh` - アンインストールスクリプト
 - `LICENSE` - MITライセンス
@@ -39,7 +45,7 @@ cd ~/dotfiles
 - **ユーティリティ**: lazygit, mise, jq, yq, trash-cli, entr, btop
 - **Git**: git, gh (GitHub CLI)
 - **クラウド**: AWS CLI, SSM Plugin
-- **AI**: Claude Code
+- **AI**: Claude Code, safe-claude, claude-audit
 
 `cheat -l`でチートシート一覧、`cheat <tool>`で表示。
 

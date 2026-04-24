@@ -25,6 +25,12 @@ SKIP_UPGRADE=1 ./install.sh
 - `.config/sheldon/plugins.toml` - Sheldon zshプラグイン定義
 - `.gitconfig.delta` - delta使用のgit diff設定
 - `cheatsheet.md` - インストール済みツールのクイックリファレンス（`cheat`コマンドでアクセス）
+- `claude/hooks/pre-tool-use.sh` - PreToolUse安全フック（危険なBashコマンドをブロック）
+- `claude/scripts/safe-claude` - gitスナップショット付き安全エージェントセッション用ラッパー
+- `claude/scripts/claude-audit` - ツール使用履歴のセッション監査ツール
+- `claude/settings.template.json` - 権限+フック設定テンプレート
+- `docs/claude-safe-usage.md` - 包括的な安全使用ガイド（EN）
+- `docs/claude-safe-usage.ja.md` - 包括的な安全使用ガイド（JA）
 - `install.sh` - WSL2 Ubuntu用ワンショットセットアップスクリプト
 - `uninstall.sh` - シンボリックリンクとgit設定を削除
 
