@@ -16,6 +16,10 @@ cd ~/dotfiles
 ./install.sh
 ```
 
+### Secure WSL2 distro for AI agents
+
+For running Claude Code and other AI agents in an isolated environment (no `/mnt/c`, no Windows interop), see [`docs/wsl-secure-setup.md`](docs/wsl-secure-setup.md). Create a separate distro and run `install-secure.sh` inside it.
+
 ## Included Files
 
 - `.zshrc` - zsh configuration
@@ -33,7 +37,10 @@ cd ~/dotfiles
 - `claude/settings.template.json` - Claude Code permissions template
 - `docs/claude-safe-usage.md` - Claude Code safe usage guide
 - `docs/claude-safe-usage.ja.md` - Claude Code safe usage guide (JA)
+- `docs/wsl-secure-setup.md` - Secure WSL2 distro setup guide for agent execution
+- `docs/wsl-secure-setup.ja.md` - Secure WSL2 distro setup guide (JA)
 - `install.sh` - Installation script
+- `install-secure.sh` - Initialization script for the secure WSL2 distro
 - `uninstall.sh` - Uninstallation script
 - `LICENSE` - MIT License
 

@@ -16,6 +16,10 @@ cd ~/dotfiles
 ./install.sh
 ```
 
+### AIエージェント用セキュアWSL2 Distro
+
+Claude Code等のAIエージェントを隔離環境（`/mnt/c`なし、Windows interopなし）で実行する場合は [`docs/wsl-secure-setup.ja.md`](docs/wsl-secure-setup.ja.md) を参照。別のDistroを作成し、その中で `install-secure.sh` を実行します。
+
 ## 含まれるファイル
 
 - `.zshrc` - zsh設定
@@ -33,7 +37,10 @@ cd ~/dotfiles
 - `claude/settings.template.json` - Claude Code権限テンプレート
 - `docs/claude-safe-usage.md` - Claude Code安全使用ガイド
 - `docs/claude-safe-usage.ja.md` - Claude Code安全使用ガイド（日本語）
+- `docs/wsl-secure-setup.md` - エージェント実行用セキュアWSL2 Distro構築ガイド
+- `docs/wsl-secure-setup.ja.md` - エージェント実行用セキュアWSL2 Distro構築ガイド（日本語）
 - `install.sh` - インストールスクリプト
+- `install-secure.sh` - セキュアWSL2 Distro用初期化スクリプト
 - `uninstall.sh` - アンインストールスクリプト
 - `LICENSE` - MITライセンス
 

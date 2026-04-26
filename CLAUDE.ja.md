@@ -32,6 +32,7 @@ SKIP_UPGRADE=1 ./install.sh
 - `docs/claude-safe-usage.md` - 包括的な安全使用ガイド（EN）
 - `docs/claude-safe-usage.ja.md` - 包括的な安全使用ガイド（JA）
 - `install.sh` - WSL2 Ubuntu用ワンショットセットアップスクリプト
+- `install-secure.sh` - エージェント専用セキュアWSL2 Distro用初期化スクリプト（interop/automount/Windows PATH無効化）
 - `uninstall.sh` - シンボリックリンクとgit設定を削除
 
 ## テスト

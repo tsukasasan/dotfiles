@@ -38,6 +38,7 @@ SKIP_UPGRADE=1 ./install.sh
 - `docs/claude-safe-usage.md` - Comprehensive safe usage guide (EN)
 - `docs/claude-safe-usage.ja.md` - Comprehensive safe usage guide (JA)
 - `install.sh` - One-shot setup script for fresh WSL2 Ubuntu
+- `install-secure.sh` - Initialization script for the agent-only secure WSL2 distro (disables interop/automount/Windows PATH)
 - `uninstall.sh` - Remove symlinks and git config entries
 
 ## Key Conventions
