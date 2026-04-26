@@ -159,21 +159,26 @@ backup_if_exists "$HOME/.gitignore_global"
 
 # .zshrc: source method instead of symlink (prevents external tools from polluting dotfiles repo)
 ZSHRC_SOURCE="source \"$DOTFILES_DIR/.zshrc\""
-if [[ ! -f "$HOME/.zshrc" ]] || ! grep -qF "$ZSHRC_SOURCE" "$HOME/.zshrc"; then
-  # Prepend source line so dotfiles config loads first, external tool additions come after
-  if [[ -f "$HOME/.zshrc" ]]; then
-    backup_if_exists "$HOME/.zshrc"
-    EXISTING="$(cat "$HOME/.zshrc")"
-    echo "$ZSHRC_SOURCE" > "$HOME/.zshrc"
-    echo "$EXISTING" >> "$HOME/.zshrc"
-  else
-    echo "$ZSHRC_SOURCE" > "$HOME/.zshrc"
-  fi
-fi
-# Remove stale symlink if upgrading from symlink method
+
+# Step 1: If existing .zshrc is a symlink (legacy), remove it first to avoid writing through it
 if [[ -L "$HOME/.zshrc" ]]; then
+  info "Removing legacy ~/.zshrc symlink..."
   rm "$HOME/.zshrc"
+fi
+
+# Step 2: Ensure source line is present in real ~/.zshrc
+if [[ ! -e "$HOME/.zshrc" ]]; then
+  # Fresh install: create real file with source line
   echo "$ZSHRC_SOURCE" > "$HOME/.zshrc"
+elif ! grep -qF "$ZSHRC_SOURCE" "$HOME/.zshrc"; then
+  # Existing real file without source line: prepend it (preserve external tool additions)
+  backup_if_exists "$HOME/.zshrc"
+  EXISTING="$(cat "$HOME/.zshrc")"
+  {
+    echo "$ZSHRC_SOURCE"
+    echo "$EXISTING"
+  } > "$HOME/.zshrc.tmp"
+  mv "$HOME/.zshrc.tmp" "$HOME/.zshrc"
 fi
 
 ln -sf "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc"
